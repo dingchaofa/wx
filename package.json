@@ -27,7 +27,12 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "koa": "^2.4.1",
+    "koa-router": "^7.3.0",
+    "mongoose": "^4.13.9",
     "nodemon": "^1.11.0",
-    "scmp": "^2.0.0"
+    "ramda": "^0.25.0",
+    "scmp": "^2.0.0",
+    "sha1": "^1.1.1"
   }
 }
