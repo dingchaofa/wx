@@ -6,7 +6,7 @@ import {resolve} from 'path'
 const models = resolve(__dirname,'../database/schema')
 
 fs.readdirSync(models)
-.filters(file=> ~file.search(/^[^\.].*js$/))
+.filter(file=> ~file.search(/^[^\.].*js$/))
 .forEach(file=>require(resolve(models,file)))
 
 export const database = app=>{
@@ -23,3 +23,5 @@ export const database = app=>{
         console.log('connect to mongodb',config.db)
     })
 }
+
+console.log('server/middlewares/database.js run')

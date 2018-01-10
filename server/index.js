@@ -57,3 +57,5 @@ class Server {
 const app = new Server()
 
 app.start()
+
+console.log('server/index.js run')

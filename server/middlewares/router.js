@@ -4,7 +4,13 @@ import config from '../config'
 export const router = app=>{
     const router = new Router()
 
+    console.log('ready router wechat-hear')
+
     router.get('/wechat-hear',(ctx,next)=>{
+        
+        console.log('router wechat-hear run')
+        require('../wechat')
+
         const token = config.wechat.token
         const {
             signature,
@@ -30,6 +36,7 @@ export const router = app=>{
 
     // })
 
-    app.use(router.routers())
+    app.use(router.routes())
     app.use(router.allowedMethods())
 }
+console.log('server/middlewares/router.js run')

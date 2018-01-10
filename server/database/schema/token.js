@@ -7,11 +7,11 @@ const TokenSchema = new mongoose.Schema({
     expires_in:Number,
     meta:{
         createdAt:{
-            type:Data,
-            default:Data.now()
+            type:Date,
+            default:Date.now()
         },
         updatedAt:{
-            type:Data,
+            type:Date,
             default:Date.now()
         }
     }
@@ -19,9 +19,9 @@ const TokenSchema = new mongoose.Schema({
 
 TokenSchema.pre('save',function(next){
     if(this.isNew){
-        this.meta.createdAt = this.updatedAt = Data.now()
+        this.meta.createdAt = this.updatedAt = Date.now()
     }else{
-        this.meta.updatedAt = Data.now()
+        this.meta.updatedAt = Date.now()
     }
     next()
 })
@@ -32,10 +32,15 @@ TokenSchema.statics = {
             name:'access_token'
         }).exec()
 
+        if(token && token.token){
+            token.access_token = token.token
+        }
+        console.log('token from token.js',token)
         return token
     },
 
     async saveAccessToken(data){
+        console.log('data4 from token.js',data)
         let token = await this.findOne({
             name:'access_token'
         }).exec()
