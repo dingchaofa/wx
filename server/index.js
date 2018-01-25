@@ -7,6 +7,8 @@ import {resolve} from 'path'
 let config = require('../nuxt.config.js')
 config.dev = !(process.env === 'production')
 
+console.log('config1',config)
+
 const r = path=>resolve(__dirname,path)
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000
@@ -19,9 +21,9 @@ class Server {
   }
   useMiddleWares(app) {
     return R.map(R.compose(
-      R.map(i=>i(app)),
-      require,
-      i => `${r('./middlewares')}/${i}`
+      R.map(i=>i(app)), // 
+      require, // require('wx/server/middlewares/database.js')
+      i => `${r('./middlewares')}/${i}` // wx/server/middlewares/database
     ))
   }
 
@@ -49,7 +51,7 @@ class Server {
     })
 
     this.app.listen(port, host)
-    console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
+    //console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
   }
 
 }
@@ -58,4 +60,4 @@ const app = new Server()
 
 app.start()
 
-console.log('server/index.js run')
+//console.log('server/index.js run')

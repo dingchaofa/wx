@@ -1,11 +1,12 @@
 import getRawBody from 'raw-body'
 import sha1 from 'sha1'
 import * as util from './util'
+import reply from '../wechat/reply'
 
-export default function (opts,replay) {
-    console.log('router wechat-hear run',opts)
+export default function (opts,reply) {
+    //console.log('router wechat-hear run',reply)
     return async function wechatMiddle(ctx,next) {
-        console.log('router wechat-hear run2',ctx)
+       // console.log('router wechat-hear run2',ctx)
             //require('../wechat')
     
             const token = opts.token
@@ -15,7 +16,7 @@ export default function (opts,replay) {
                 timestamp,
                 echostr
             } = ctx.query
-            console.log('signature',signature)
+            //console.log('signature',signature)
             
             const str = [token,timestamp,nonce].sort().join('')
             const sha = sha1(str)
@@ -32,7 +33,7 @@ export default function (opts,replay) {
                     return false
                 }
 
-                const data =await getRaBwody(ctx.req,{
+                const data =await getRawBody(ctx.req,{
                     length:ctx.length,
                     limit: '1mb',
                     encoding:ctx.charset
@@ -40,7 +41,7 @@ export default function (opts,replay) {
 
                 const content = await util.parseXML(data)
                 //const message = util.formatMessage(content)
-                console.log('content',content)
+                console.log('content1',content)
 
                 ctx.weixin = {} //message
 
@@ -49,15 +50,15 @@ export default function (opts,replay) {
                 const replyBody = ctx.body
                 const msg = ctx.weixin
                 //const xml = util.tpl(replyBody,msg)
-                const xml = `<xml> 
-                                <ToUserName>< ![CDATA[toUser] ]></ToUserName> 
-                                <FromUserName>< ![CDATA[fromUser] ]></FromUserName>
-                                <CreateTime>12345678</CreateTime> 
-                                <MsgType>< ![CDATA[text] ]></MsgType>
-                                <Content>< ![CDATA[你好] ]></Content> 
+                const xml = `<xml>
+                                <ToUserName><![CDATA[${content.xml.FromUserName[0]}]]></ToUserName> 
+                                <FromUserName><![CDATA[${content.xml.ToUserName[0]}]]></FromUserName>
+                                <CreateTime>${content.xml.CreateTime[0]}</CreateTime> 
+                                <MsgType><![CDATA[text]]></MsgType>
+                                <Content><![CDATA[${replyBody}]]></Content> 
                             </xml>`
 
-                console.log(replyBody)
+                //console.log('replyBody1',replyBody)
 
                 ctx.status = 200
                 ctx.type = 'application/xml'
@@ -65,4 +66,4 @@ export default function (opts,replay) {
             }
     }
 }
-console.log('wechat-lib/middlewares.js run')
+//console.log('wechat-lib/middlewares.js run')

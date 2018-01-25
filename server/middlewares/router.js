@@ -6,7 +6,7 @@ import wechatMiddle from '../wechat-lib/middleware'
 export const router = app=>{
     const router = new Router()
 
-    console.log('ready router wechat-hear')
+    //console.log('ready router wechat-hear')
 
     router.all('/wechat-hear',wechatMiddle(config.wechat,reply))
     
@@ -14,4 +14,4 @@ export const router = app=>{
     app.use(router.routes())
     app.use(router.allowedMethods())
 }
-console.log('server/middlewares/router.js run')
+//console.log('server/middlewares/router.js run')

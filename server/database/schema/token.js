@@ -62,3 +62,4 @@ TokenSchema.statics = {
 }
 
 const Token = mongoose.model('Token',TokenSchema)
+console.log('虽然导出的是空对象，目的是让这个模块执行token.js')
