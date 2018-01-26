@@ -7,8 +7,6 @@ import {resolve} from 'path'
 let config = require('../nuxt.config.js')
 config.dev = !(process.env === 'production')
 
-console.log('config1',config)
-
 const r = path=>resolve(__dirname,path)
 const host = process.env.HOST || '127.0.0.1'
 const port = process.env.PORT || 3000

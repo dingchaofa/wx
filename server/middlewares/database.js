@@ -24,4 +24,4 @@ export const database = app=>{
     })
 }
 
-console.log('server/middlewares/database.js run')
+//console.log('server/middlewares/database.js run')

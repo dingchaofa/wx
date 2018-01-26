@@ -1,4 +1,5 @@
 import xml2js from 'xml2js'
+const util = require('util')
 
 export function parseXML (xml) {
     return new Promise((resolve,reject)=>{
@@ -8,4 +9,4 @@ export function parseXML (xml) {
         })
     })
 }
-console.log('wechat-lib/util.js run')
+//console.log('wechat-lib/util.js run')

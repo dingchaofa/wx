@@ -1,12 +1,13 @@
 import getRawBody from 'raw-body'
 import sha1 from 'sha1'
 import * as util from './util'
-import reply from '../wechat/reply'
+
 
 export default function (opts,reply) {
-    //console.log('router wechat-hear run',reply)
+    //console.log('router wechat-hear run2',reply)
     return async function wechatMiddle(ctx,next) {
-       // console.log('router wechat-hear run2',ctx)
+       //console.log('router wechat-hear run2',ctx)
+       //console.log('router wechat-hear run3',ctx.query) //自动绑定查询字符串
             //require('../wechat')
     
             const token = opts.token
@@ -16,7 +17,8 @@ export default function (opts,reply) {
                 timestamp,
                 echostr
             } = ctx.query
-            //console.log('signature',signature)
+            console.log('ctx',ctx.req)
+            console.log('charset',ctx.charset)
             
             const str = [token,timestamp,nonce].sort().join('')
             const sha = sha1(str)
@@ -30,15 +32,16 @@ export default function (opts,reply) {
             }else if(ctx.method === 'POST'){
                 if(sha !==signature){
                     ctx.body = 'Failed method post from wechat-lib/middleware.js'
+                    console.log('sha !==signature')
                     return false
                 }
 
                 const data =await getRawBody(ctx.req,{
                     length:ctx.length,
                     limit: '1mb',
-                    encoding:ctx.charset
+                    encoding:ctx.charset || 'utf8' //ctx.charset 这里的值是undefined
                 })
-
+                console.log('data',data,typeof data)
                 const content = await util.parseXML(data)
                 //const message = util.formatMessage(content)
                 console.log('content1',content)

@@ -6,4 +6,3 @@ export default {
     },
     db:'mongodb://localhost/wx'
 }
-console.log('server/config/index.js run')
