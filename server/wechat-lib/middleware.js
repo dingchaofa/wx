@@ -17,7 +17,7 @@ export default function (opts,reply) {
                 timestamp,
                 echostr
             } = ctx.query
-            console.log('ctx',ctx.req)
+            //console.log('ctx',ctx.req)
             console.log('charset',ctx.charset)
             
             const str = [token,timestamp,nonce].sort().join('')
@@ -42,26 +42,19 @@ export default function (opts,reply) {
                     encoding:ctx.charset || 'utf8' //ctx.charset 这里的值是undefined
                 })
                 console.log('data',data,typeof data)
-                const content = await util.parseXML(data)
-                //const message = util.formatMessage(content)
+                const content = await util.parseXML(data)  //解析接收到的内容
+                const message = util.formatMessage(content.xml) //只对key-value中的value是数组解析成字符串或者对象，返回一个value没有数组的对象
                 console.log('content1',content)
 
-                ctx.weixin = {} //message
+                ctx.weixin = message
 
                 await reply.apply(ctx,[ctx,next])
 
                 const replyBody = ctx.body
                 const msg = ctx.weixin
-                //const xml = util.tpl(replyBody,msg)
-                const xml = `<xml>
-                                <ToUserName><![CDATA[${content.xml.FromUserName[0]}]]></ToUserName> 
-                                <FromUserName><![CDATA[${content.xml.ToUserName[0]}]]></FromUserName>
-                                <CreateTime>${content.xml.CreateTime[0]}</CreateTime> 
-                                <MsgType><![CDATA[text]]></MsgType>
-                                <Content><![CDATA[${replyBody}]]></Content> 
-                            </xml>`
+                const xml = util.tpl(replyBody,msg)
 
-                //console.log('replyBody1',replyBody)
+                console.log('xmlxml',xml)
 
                 ctx.status = 200
                 ctx.type = 'application/xml'
