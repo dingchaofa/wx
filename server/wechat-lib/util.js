@@ -2,6 +2,7 @@ import xml2js from 'xml2js'
 import {template} from './tpl'
 
 function parseXML (xml) {
+    console.log('string',xml.toString())
     return new Promise((resolve,reject)=>{
         xml2js.parseString(xml,{trim:true},(err,content)=>{
             if(err) reject(err)

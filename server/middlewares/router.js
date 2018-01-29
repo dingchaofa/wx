@@ -14,4 +14,4 @@ export const router = app=>{
     app.use(router.routes())
     app.use(router.allowedMethods())
 }
-//console.log('server/middlewares/router.js run')
+console.log('this is finally run')
