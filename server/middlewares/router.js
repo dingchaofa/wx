@@ -24,9 +24,11 @@ export const router = app=>{
         //     fs.writeFileSync('data.png',data,'binary')
         // }) //获取图片并写入本地
 
-        //wechat.handle('getBatch','image')
+        //wechat.handle('getBatch','image') //批量获取图片
 
-        wechat.handle('getCount')
+        //wechat.handle('getCount') //获取素材总量
+
+        //wechat.handle('getUserInfo','or2TT1a0021PWrW4O50SmUzLb2XA') //获取用户信息
     })
 
     app.use(router.routes())

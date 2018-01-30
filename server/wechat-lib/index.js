@@ -18,6 +18,26 @@ const api = {
         update_news: base + 'material/update_news?', //修改永久图文素材
         get_count: base + 'material/get_materialcount?', // 获取素材总数
         get_batch: base + 'material/batchget_material?' // 获取素材列表
+    },
+    tag: {
+        createTag: base + 'tags/create?', //创建标签
+        getTag: base + 'tags/get?', //获取公众号已创建的标签
+        updataTag: base + 'tags/update?', //编辑标签
+        delTag : base + 'tags/delete?', //删除标签
+        getUserTag: base + 'user/tag/get?', //获取标签下粉丝列表
+        batchTag: base + 'tags/members/batchtagging?', //批量为用户打标签
+        batchUnTag: base + 'tags/members/batchuntagging?', // 批量为用户取消标签
+        getUserTagList: base + 'tags/getidlist?', //获取用户身上的标签列表
+        getBlackList: base + 'tags/members/getblacklist?', //获取公众号的黑名单列表
+        batchBlackList: base + 'tags/members/batchblacklist?', //拉黑用户
+        batchUnBlackList: base + 'tags/members/batchunblacklist?' //取消拉黑用户
+    },
+    user: {
+        remark: base + 'user/info/updateremark?', //设置用户备注名
+        getUserInfo: base + 'user/info?', //获取用户基本信息
+        getBatchUserInfo: base + 'user/info/batchget?', //批量获取用户基本信息
+        getUserList: base + 'user/get?', //获取用户列表
+
     }
 }
 
@@ -198,5 +218,14 @@ export default class Wechat {
             json: true
         }
         return options
+    }
+
+    getUserInfo(token,openid,lang){
+        let url = api.user.getUserInfo
+        lang = lang || 'zh-CN'
+        openid = openid || ''
+        return {
+            url:url + 'access_token=' + token + '&openid=' + openid + '&lang=' + lang
+        }
     }
 }
