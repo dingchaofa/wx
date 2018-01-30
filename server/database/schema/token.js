@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+//const Schema = mongoose.Schema
 
 const TokenSchema = new mongoose.Schema({
     name:String,
@@ -35,12 +35,12 @@ TokenSchema.statics = {
         if(token && token.token){
             token.access_token = token.token
         }
-        console.log('token from token.js',token)
+        //console.log('token from token.js',token)
         return token
     },
 
     async saveAccessToken(data){
-        console.log('data4 from token.js',data)
+        //console.log('data4 from token.js',data)
         let token = await this.findOne({
             name:'access_token'
         }).exec()

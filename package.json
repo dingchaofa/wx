@@ -39,6 +39,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "koa": "^2.4.1",
     "koa-router": "^7.3.0",
+    "lodash": "^4.17.4",
     "mongoose": "^4.13.9",
     "nodemon": "^1.11.0",
     "ramda": "^0.25.0",

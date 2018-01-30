@@ -4,8 +4,6 @@ import Wechat from '../wechat-lib'
 
 const Token = mongoose.model('Token')
 
-console.log('wechat/index.js run')
-
 const wechatConfig = {
     wechat:{
         appID:config.wechat.appID,
@@ -16,11 +14,7 @@ const wechatConfig = {
     }
 }
 
-const getWechat = ()=>{
+export const getWechat = ()=>{
     const wechatClient = new Wechat(wechatConfig.wechat)
-    console.log('wechat/index.js wechatConfig.wechat',wechatConfig.wechat)
     return wechatClient
 }
-getWechat()
-
-console.log('wechat/index.js run')
