@@ -4,6 +4,12 @@
 
 >技术栈：Node.js、Koa、Koa-router、Nuxt.js、Vue.js、ES6、ES7、ramda.js、sha1、raw-body、ejs、
 
+
+### 扫描二维码进入测试
+
+![测试二维码](https://raw.githubusercontent.com/dingchaofa/wx/master/static/img/test_account.png)
+
+
 ### 进度
 1. 部署MongoDB，开通微信个人订阅号实力青铜V5。
 
