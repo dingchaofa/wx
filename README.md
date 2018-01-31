@@ -7,13 +7,17 @@
 ### 进度
 1. 部署MongoDB，开通微信个人订阅号实力青铜V5。
 
-2. 拿到微信测试号access_token，并存储到本地数据库，测试地址：https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index。
+2. 公众号拿到微信测试号access_token，并存储到本地数据库，测试地址：https://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index。
 
-3. 通过微信测试账号，能自动回复用户消息。
+3. 公众号通过微信测试账号，能自动回复用户消息。
 
-4. 回复用户消息模版引擎构建模版`wx/server/wechat-lib/tpl.js`
+4. 公众号回复用户消息模版引擎构建模版`wx/server/wechat-lib/tpl.js`
 
-5. 测试新增、获取、修改、删除素材接口
+5. 公众号测试新增、获取、修改、删除素材接口
+
+6. 公众号测试获取用户信息接口，标签接口
+
+7. 公众号自定义菜单
 
 
 ### 注意事项

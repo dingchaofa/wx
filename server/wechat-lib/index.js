@@ -38,6 +38,11 @@ const api = {
         getBatchUserInfo: base + 'user/info/batchget?', //批量获取用户基本信息
         getUserList: base + 'user/get?', //获取用户列表
 
+    },
+    menu: {
+        create: base + 'menu/create?', //自定义菜单创建接口
+        get: base + 'menu/get?', //自定义菜单查询接口
+        del: base + 'menu/delete?' //自定义菜单删除接口
     }
 }
 
@@ -221,11 +226,33 @@ export default class Wechat {
     }
 
     getUserInfo(token,openid,lang){
-        let url = api.user.getUserInfo
+        
         lang = lang || 'zh-CN'
         openid = openid || ''
+
+        let url = api.user.getUserInfo + 'access_token=' + token + '&openid=' + openid + '&lang=' + lang
+
+        return {url}
+    }
+
+    createMenu(token,menu){
+        let url = api.menu.create + 'access_token=' + token
+
         return {
-            url:url + 'access_token=' + token + '&openid=' + openid + '&lang=' + lang
+            method: 'POST',
+            url,
+            json:true,
+            body:menu
         }
+    }
+
+    getMenu(token){
+        let url = api.menu.get + 'access_token=' + token
+        return {url}
+    }
+
+    delMenu(token){
+        let url = api.menu.del + 'access_token=' + token
+        return {url}
     }
 }
