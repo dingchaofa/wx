@@ -1,5 +1,6 @@
 import xml2js from 'xml2js'
 import {template} from './tpl'
+import sha1 from 'sha1'
 
 function parseXML (xml) {
     console.log('string',xml.toString())
@@ -71,8 +72,45 @@ function tpl(content,message){
    return template(info)
 }
 
+function signAlgorithm(noncestr,ticket,timestamp,url){
+    const ret = {
+        jsapi_ticket: ticket,
+        noncestr: noncestr,
+        timestamp,
+        url
+    }
+
+    let keys = Object.keys(ret).map((ele)=>{
+        return ele.toLocaleLowerCase()
+    }).sort()
+
+    let string = ''
+
+    for(let i=0;i<keys.length;i++){
+        string +='&'+ keys[i] + '=' + ret[keys[i]]
+    }
+
+    const signature = sha1(string.slice(1))
+    
+    return signature
+}
+
+function sign(ticket,url){
+
+   const noncestr = Math.random().toString(32).slice(2)
+   const timestamp = parseInt(Date.now()/1000)
+   const signature = signAlgorithm(noncestr,ticket,timestamp,url)
+
+   return {
+       noncestr,
+       timestamp,
+       signature
+   }
+}
+
 export {
     parseXML,
     formatMessage,
-    tpl
+    tpl,
+    sign
 }

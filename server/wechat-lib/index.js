@@ -1,10 +1,12 @@
 import request from 'request-promise'
 import * as _ from 'lodash'
 import fs from 'fs'
+import { sign } from './util'
 
 const base = 'https://api.weixin.qq.com/cgi-bin/'
 const api = {
     accessToken: base + 'token?grant_type=client_credential',
+    ticket: base + 'ticket/getticket?', //获得jsapi_ticket
     temporary: {
         upload: base + "media/upload?", //新增临时素材
         get: base + 'media/get?' //获取临时素材
@@ -56,8 +58,11 @@ export default class Wechat {
         this.appSecret = opts.appSecret
         this.getAccessToken = opts.getAccessToken
         this.saveAccessToken = opts.saveAccessToken
+        this.getTicket = opts.getTicket
+        this.saveTicket = opts.saveTicket
 
-        this.fetchAccessToken()
+        this.fetchToken('token')
+        this.fetchToken()
     }
 
     async request(options) {
@@ -72,21 +77,40 @@ export default class Wechat {
         }
     }
 
-    async fetchAccessToken() {
-        let data = await this.getAccessToken()
+    // fetch 'token' || 'ticket'
+    async fetchToken(token) {
+        let data;
+        if(token === 'token'){
+             data = await this.getAccessToken()
 
-        if (!this.isValidAccessToken(data)) {
-            data =  await this.updateAccessToken()
+            if (!this.isValidToken(data,'access_token')) {
+                data =  await this.updateToken('token')
+                await this.saveAccessToken(data)
+            }
+        }else{ //ticket
+            data = await this.getTicket()
+
+            if (!this.isValidToken(data,'ticket')) {
+                data =  await this.updateToken() 
+                await this.saveTicket(data)
+            }
         }
-        await this.saveAccessToken(data)
+        
 
         return data
     }
 
-    async updateAccessToken() { //更新token，并保存到本地
+    async updateToken(token) { //更新token，并保存到本地
+        let url;
+
+        if(token === 'token'){
+            url = api.accessToken + '&appid=' + this.appID + '&secret=' + this.appSecret
+        }else{
+            let token = await this.fetchToken('token')
+            url = api.ticket + '&access_token=' + token.token + '&type=jsapi'
+            console.log('url2',url)
+        }
         
-        const url = api.accessToken + '&appid=' + this.appID + '&secret=' + this.appSecret
-        //console.log('url from server/wechat-lib/index.js', url)
         const data = await this.request({ url:url })
 
         console.log('data2 from server/wechat-lib/index.js', data)
@@ -97,8 +121,8 @@ export default class Wechat {
         return data
     }
 
-    isValidAccessToken(data) { //判断token是否有效
-        if (!data || !data.access_token || !data.expires_in) {
+    isValidToken(data,name) { //判断token是否有效
+        if (!data || !data[name] || !data.expires_in) {
             return false
         }
 
@@ -133,8 +157,6 @@ export default class Wechat {
                 form.media = fs.createReadStream(material)
             }
         }
-
-        
 
         let uploadUrl = url + 'access_token=' + token
 
@@ -254,5 +276,9 @@ export default class Wechat {
     delMenu(token){
         let url = api.menu.del + 'access_token=' + token
         return {url}
+    }
+
+    sign(ticket,url){
+        return sign(ticket,url)
     }
 }
