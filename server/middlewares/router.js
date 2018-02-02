@@ -14,10 +14,11 @@ export const router = app=>{
 
     router.all('/wechat-hear',wechatMiddle(config.wechat,reply))
     
-    /*
+    
 
     //上传素材
     router.get('/upload',(ctx,next)=>{
+        
         let Wechat = require('../wechat')
         let wechat = Wechat.getWechat()
 
@@ -25,9 +26,9 @@ export const router = app=>{
 
         //wechat.handle('uploadMaterial','image',resolve(__dirname,'../../static/img/logo.png'),true) //新增永久图片
 
-        // wechat.handle('getMaterial','AjsxwBRbryXLBaiuhGQ-_AVN4n7lMn50OD1R8mEKRYo',true).then((data)=>{
-        //     fs.writeFileSync('data.png',data,'binary')
-        // }) //获取图片并写入本地
+        wechat.handle('getMaterial','AjsxwBRbryXLBaiuhGQ-_AVN4n7lMn50OD1R8mEKRYo',true,'binary').then((data)=>{
+            fs.writeFileSync('./data3.png',data,'binary')
+        }) //获取图片并写入本地
 
         //wechat.handle('getBatch','image') //批量获取图片
 
@@ -40,9 +41,9 @@ export const router = app=>{
         //wechat.handle('getMenu')
         //wechat.handle('delMenu')
     })
-    */
+    
 
-    router.get('/wechat-signature',signature)
+    //router.get('/wechat-signature',signature)
 
     app.use(router.routes())
     app.use(router.allowedMethods())

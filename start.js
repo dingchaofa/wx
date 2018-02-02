@@ -3,4 +3,5 @@ require('babel-core/register')({
 })
 
 require('babel-polyfill')
-require('./server')
+//require('./server')
+require('./server/crawler/crawlLol')

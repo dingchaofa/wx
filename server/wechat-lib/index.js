@@ -184,16 +184,17 @@ export default class Wechat {
     }
 
     async handle(operation,...args){
-        const tokenData = await this.fetchAccessToken()
+
+        const tokenData = await this.fetchToken('token')
         
         const options = this[operation](tokenData.token,...args)
         console.log('options',options)
         const data = await this.request(options)
-        console.log('data',data)
+        //console.log('data',data)
         return data
     }
 
-    getMaterial(token,mediaId,permanent){ //获取素材
+    getMaterial(token,mediaId,permanent,encoding='utf8'){ //获取素材
         let url = api.temporary.get
 
         if(permanent){
@@ -203,7 +204,8 @@ export default class Wechat {
         const options = {
             method: 'POST',
             url: url + 'access_token=' + token,
-            json:true
+            json:true,
+            encoding
         }
 
         options.body = {
