@@ -41,14 +41,18 @@
     "eslint-plugin-standard": "^3.0.1",
     "gbk": "^0.1.0",
     "iconv-lite": "^0.4.19",
+    "karma-phantomjs-launcher": "1.0.2",
     "koa": "^2.4.1",
     "koa-router": "^7.3.0",
     "lodash": "^4.17.4",
     "mongoose": "^4.13.9",
     "nodemon": "^1.11.0",
+    "phantomjs": "2.1.7",
     "ramda": "^0.25.0",
     "request-promise": "^4.2.2",
     "scmp": "^2.0.0",
     "sha1": "^1.1.1"
-  }
+  },
+  "repository": "git@github.com:dingchaofa/wx.git",
+  "license": "MIT"
 }

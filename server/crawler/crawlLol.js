@@ -1,3 +1,5 @@
+
+//这里无法爬取动态页面，请看lol/crawler.js
 const cheerio = require('cheerio')
 const request = require('request-promise')
 const fs = require('fs')
@@ -8,6 +10,7 @@ var options = {
     transform: function (body) {
         //console.log('body',body)
         const html = Iconv.decode(body,'gb2312')
+        fs.writeFileSync('./lol.html',html)
         //console.log('html',html)
         return cheerio.load(html);
     },
@@ -26,4 +29,4 @@ request(options)
     .catch(function (err) {
         // Crawling failed or Cheerio choked...
         console.error(err)
-    });
+});
