@@ -28,10 +28,12 @@ class Server {
   async start() {
     // Instantiate nuxt.js
     const nuxt = new Nuxt(config)
-
+ 
     // Build in development
+  
     if (config.dev) {
       const builder = new Builder(nuxt)
+      //console.log(builder)
       await new Builder(nuxt).build()
     }
 
@@ -49,7 +51,7 @@ class Server {
     })
 
     this.app.listen(port, host)
-    //console.log('Server listening on ' + host + ':' + port) // eslint-disable-line no-console
+    /console.log('Server listening on http://'+ host + ':' + port) // eslint-disable-line no-console
   }
 
 }

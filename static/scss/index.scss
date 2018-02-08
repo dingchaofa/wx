@@ -1,0 +1,18 @@
+#index{
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    h1 {
+      margin-top: 20px;
+      font-size: 30px;
+    }
+    .character {
+        background: #fbf8f8;
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+    }
+  
+  }

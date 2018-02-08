@@ -1,0 +1,13 @@
+#index{
+  width: 90%;
+  h1 {
+    margin-top: 20px;
+    font-size: 30px;
+  }
+  .character {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+}

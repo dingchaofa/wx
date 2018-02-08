@@ -1,18 +1,72 @@
-<template>
-  <section class="container">
-    <img src="../static/img/logo.png" alt="Nuxt.js Logo" class="logo" />
-    <h1 class="title">
-      Universal Vue.js Application Framework
-    </h1>
-    <nuxt-link class="button" to="/about">
-      About page
-    </nuxt-link>
-  </section>
+<template lang="pug">
+  section#index.container
+    h1 英雄联盟------人物角色
+    div.character
+      ul
+        li
+          a(href="hero-detail?id=Aatrox")
+            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Aatrox.png")
+            p 暗裔剑魔
+        li
+          a(href="hero-detail?id=Ahri")
+            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Ahri.png")
+            p 九尾妖狐
+        li
+          a(href="hero-detail?id=Akali")
+            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Akali.png")
+            p 阿卡丽
+        li
+          a(href="hero-detail?id=Ashe")
+            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Ashe.png")
+            p 寒冰射手
+        li(v-for='item in hero' @click='heroDetail(item.id)')
+          
+            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Ashe.png")
+            p {{item.id}}
+  
+    transition(name="fade-turn")
+      Loading(v-if="loading")
 </template>
 
-<style scoped>
-.title
-{
-  margin: 50px 0;
+<script>
+import Loading from '../components/Loading.vue'
+
+import { mapState } from 'vuex'
+
+export default {
+  head(){
+    return {
+      title: '实力青铜v5'
+    }
+  },
+  components: {
+    Loading
+  },
+  data(){
+    return {
+      loading:false
+    }
+  },
+  computed: {
+    ...mapState([
+      'hero'
+    ])
+  },
+  methods:{
+    heroDetail (id) {
+      console.log(this)
+      this.$router.push({
+        path: '/hero-detail',
+        query: {
+          id
+        }
+      })
+    }
+  },
+  beforeCreate(){
+    this.$store.dispatch('fetchHero')
+  }
 }
-</style>
+</script>
+
+<style scoped lang='scss' src='../static/scss/index.scss'></style>
