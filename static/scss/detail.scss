@@ -1,0 +1,65 @@
+#detail {
+    width: 90%;
+    margin: 0 auto;
+    .base-info {
+        width: 100%;
+        img {
+            width: 100%;
+        }
+        div {
+            padding-left:20px;
+            background: #fff;
+            h3 {
+                margin-left: 40px;
+            }
+            span {
+                margin-left: 10px;
+                font-size: 12px;
+                padding: 1px 8px;
+                background: #efef09;
+                border-radius: 15px;
+            }
+            .hero-attr {
+                margin: 10px;
+                dt {
+                    margin-left: 5px;
+                    float:left;
+                    font-size: 14px;
+                    line-height: 20px;
+                    width: 20%;
+                    // margin-bottom: 5px;
+                    // display: inline-block
+                }
+                dd {
+                    float: left;
+                    width: 70%;
+                    height: 15px;
+                    background: #d9dada;
+                    margin-bottom: 5px;
+                    i {
+                        display: block;
+                        height: 15px;
+                    }
+                }
+                &:after {
+                    content:"";
+                    display: block;
+                    clear: both;
+                }
+            }
+            
+        }
+    }
+    .bg-story {
+        p {
+            background: #f9f9f9;
+            margin:20px 10px;
+            text-indent: 2em;
+            padding: 5px;
+            font-size: 14px;
+        }
+    }
+    .skill-info {
+        
+    }
+}
