@@ -21,7 +21,7 @@ var cur_num = 0 //第多少个
 getHero(all_hero[cur_num])
 function getHero(hero) {
     console.log('开始爬第' + cur_num + '条数据')
-    console.log(cur_num / all_hero.length + "%已完成")
+    console.log(cur_num / all_hero.length *100 + "%已完成")
     var path = './server/crawler/database/' + hero + '.json' //英雄数据写入的地址
 
     page.settings = {
@@ -37,7 +37,7 @@ function getHero(hero) {
                 var result = page.evaluate(function () { //window
 
                     var hero = document.location.search.slice(4)
-                    LOLherojs.champion[hero].data.blocks = null //把不需要的数据处理掉
+                    //LOLherojs.champion[hero].data.blocks = null //这里是推荐装备
 
                     return LOLherojs.champion[hero].data
                 });
