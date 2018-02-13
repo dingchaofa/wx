@@ -108,12 +108,12 @@ export default class Wechat {
         }else{
             let token = await this.fetchToken('token')
             url = api.ticket + '&access_token=' + token.token + '&type=jsapi'
-            console.log('url2',url)
+            //console.log('url2',url)
         }
         
         const data = await this.request({ url:url })
 
-        console.log('data2 from server/wechat-lib/index.js', data)
+        //console.log('data2 from server/wechat-lib/index.js', data)
         const now = (Date.now())
         const expiresIn = now + (data.expires_in - 20) * 1000
         data.expires_in = expiresIn
@@ -188,7 +188,7 @@ export default class Wechat {
         const tokenData = await this.fetchToken('token')
         
         const options = this[operation](tokenData.token,...args)
-        console.log('options',options)
+        //console.log('options',options)
         const data = await this.request(options)
         //console.log('data',data)
         return data
