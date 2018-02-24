@@ -25,5 +25,3 @@ HeroSchema.pre('save',function(next){
 
 
 const Hero = mongoose.model('Hero',HeroSchema)
-
-console.log('hero')

@@ -1,6 +1,7 @@
 import * as api from '../api/wechat'
 
 export async function signature(ctx,next) {
+    
     const url = ctx.query.url
 
     if(!url) ctx.throw(404)

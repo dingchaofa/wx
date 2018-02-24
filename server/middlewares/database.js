@@ -32,9 +32,9 @@ export const database = app=>{
 
         const heroData = await HeroModel.find({})
         // HeroModel.remove({})
-        console.log(heroData)
-        if(!heroData.length){}
-        HeroModel.insertMany(hero)
+        //console.log(heroData)
+        if(!heroData.length) HeroModel.insertMany(hero)
+        
         
     })
 }
