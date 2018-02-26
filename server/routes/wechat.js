@@ -28,7 +28,6 @@ export class WechatController {
     
     @get('/wechat-signature')
     async wechatSignature(ctx,next){
-        console.log('signature')
         signature(ctx,next)
     }
 }

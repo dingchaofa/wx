@@ -23,8 +23,7 @@ export default class Route {
        glob.sync(resolve(this.apiPath, './*.js')).forEach(require);
 
        for(let [conf,controller] of routersMap){
-        //    console.log('----------')
-        //    console.log(conf,controller)
+        
             const controllers = isArray(controller)
             let prefixPath = conf.target[symbolPrefix]
 
