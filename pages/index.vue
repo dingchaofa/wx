@@ -3,26 +3,19 @@
     h1 英雄联盟------人物角色
     div.character
       ul
-        li
-          a(href="hero-detail?id=Aatrox")
-            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Aatrox.png")
-            p 暗裔剑魔
-        li
-          a(href="hero-detail?id=Ahri")
-            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Ahri.png")
-            p 九尾妖狐
-        li
-          a(href="hero-detail?id=Akali")
-            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Akali.png")
-            p 阿卡丽
-        li
-          a(href="hero-detail?id=Ashe")
-            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Ashe.png")
-            p 寒冰射手
+        //- li
+        //-   a(href="hero-detail?id=Aatrox")
+        //-     img(src="http://ossweb-img.qq.com/images/lol/img/champion/Aatrox.png")
+        //-     p 暗裔剑魔
+        //- li
+        //-   a(href="hero-detail?id=Ahri")
+        //-     img(src="http://ossweb-img.qq.com/images/lol/img/champion/Ahri.png")
+        //-     p 九尾妖狐
+        
         li(v-for='item in hero' @click='heroDetail(item.id)')
           
-            img(src="http://ossweb-img.qq.com/images/lol/img/champion/Ashe.png")
-            p {{item.id}}
+            img(:src="'http://ossweb-img.qq.com/images/lol/img/champion/'+item.id+'.png'")
+            p {{item.name}}
   
     transition(name="fade-turn")
       Loading(v-if="loading")
@@ -65,6 +58,9 @@ export default {
   },
   beforeCreate(){
     this.$store.dispatch('fetchHero')
+  },
+  created(){
+    console.log('this.hero',this.hero)
   }
 }
 </script>

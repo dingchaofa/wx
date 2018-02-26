@@ -41,5 +41,8 @@
 
 5. PhantomJS，更多写在博客里。
 
+6. vue里渲染页面取到空值，有三种方法。
+    1. 在data里给默认值
+
 ### 项目笔记
 https://dingchaofa.github.io/

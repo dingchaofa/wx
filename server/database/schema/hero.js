@@ -13,7 +13,9 @@ const HeroSchema = new mongoose.Schema({
                         {
                             id: String
                         }
-                    ]
+                    ],
+                    type: {type: String},
+                    showIfSummonerSpell:String
                 }
             ]
         }

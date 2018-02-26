@@ -1,42 +1,42 @@
 <template lang='pug'>
-    #detail
+    #detail(v-if='hero.length')
         .base-info
-            img(src='http://ossweb-img.qq.com/images/lol/web201310/skin/big266000.jpg')
+            img(:src='"http://ossweb-img.qq.com/images/lol/web201310/skin/big"+ hero[0].skins[0].id +".jpg"')
             div
-                h4 暗裔剑魔
-                h3 亚托克斯
-                span 战士
-                span 坦克
+                h4 {{hero[0].name}}
+                h3 {{hero[0].title}}
+                span {{tags(hero[0].tags[0])}}
+                span {{tags(hero[0].tags[1])}}
                 dl.hero-attr
                     dt 物理攻击
                     dd
-                        i(style="width:80%;background:#ffdc33;")
+                        i(:style="{background:'#ffdc33',width:hero[0].info.attack+'0%'}")
                     dt 魔法攻击
                     dd
-                        i(style="width:60%;background:#155ad8;")
+                        i(:style="{background:'#155ad8',width:hero[0].info.magic+'0%'}")
                     dt 防御能力
                     dd
-                        i(style="width:40%;background:#da09ca;")
+                        i(:style="{background:'#da09ca',width:hero[0].info.defense+'0%'}")
                     dt 上手难度
                     dd
-                        i(style="width:10%;background:#44bbb6;")
+                        i(:style="{background:'#44bbb6',width:hero[0].info.difficulty+'0%'}")
         .bg-story
             h3 背景故事
-            p 远古的暗裔族群中，曾有一位举世无双的剑术大师亚托克斯，他将浴血的战场看作狂欢的乐园。后来，他被敌人用魔法禁锢在了自己的剑中。他蛰伏了千年，只为等待一个合适的宿主到来—— 一位凡人武士持起亚托克斯的同时，也被这把活体武器侵蚀腐化，并改变了形态，至此，亚托克斯获得了重生。虽然这位暗裔的故事传说现已少有人信，但亚托克斯却始终铭记着自己种族的灭亡，一剑一剑地劈开自己的复仇之路。
+            p {{hero[0].lore}}
         .skill-info
             h3 技能介绍
             ul.skill-icon
-                li(:class="{'cur-li-bg':cur_skill === passive.name}")
-                    img(@click='cur_skill = passive.name' :src="'http://ossweb-img.qq.com/images/lol/img/passive/'+passive.image.full")
-                li(v-for='(item,index) in skills'  :class="{'cur-li-bg':cur_skill === item.name}")
+                li(:class="{'cur-li-bg':cur_skill === hero[0].passive.name}")
+                    img(@click='cur_skill = hero[0].passive.name' :src="'http://ossweb-img.qq.com/images/lol/img/passive/'+hero[0].passive.image.full")
+                li(v-for='(item,index) in hero[0].spells'  :class="{'cur-li-bg':cur_skill === item.name}")
                     img(@click='cur_skill = item.name' :src='"http://ossweb-img.qq.com/images/lol/img/spell/"+ item.image.full')
             ul.skill-text
                 li
-                    div(v-show='cur_skill === passive.name')
-                        h6 {{passive.name}}
+                    div(v-show='cur_skill === hero[0].passive.name')
+                        h6 {{hero[0].passive.name}}
                             span(class='hot-key') 被动技能
-                        p {{passive.description}}
-                li(v-for='(item,index) in skills')
+                        p {{hero[0].passive.description}}
+                li(v-for='(item,index) in hero[0].spells')
                     div(v-show='cur_skill===item.name')
                         h6 {{item.name}}
                             span(class='hot-key') 快捷键：{{hotKey(index)}}
@@ -48,7 +48,7 @@
 
         .recommend-equip
             h3 推荐装备
-            dl(v-for="(item,index) in blocks[0].recommended" v-if="showEquip(item.type,item.showIfSummonerSpell)")
+            dl(v-for="(item,index) in hero[0].blocks[0].recommended" v-if="showEquip(item.type,item.showIfSummonerSpell)")
                 dt {{showEquip(item.type,item.showIfSummonerSpell)}}
                 
                 dd(v-if="showEquip(item.type,item.showIfSummonerSpell)")
@@ -69,522 +69,407 @@
 
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   head() {
     return {
-      title: "暗裔剑魔"
+      title: this.$route.query.id
     };
   },
   data() {
     return {
-      passive: {
-        description:
-          "亚托克斯可通过技能来浇灌鲜血魔井。当鲜血魔井被灌满时，亚托克斯会进入【杀意已决】状态，这个状态可通过与英雄或野怪作战来一直保持，并会为亚托克斯提供攻击力、攻击速度和在承受致命伤害后的复活能力。",
-        image: {
-          full: "Aatrox_Passive.png",
-          group: "passive",
-          h: 48,
-          sprite: "passive0.png",
-          w: 48,
-          x: 0,
-          y: 0
-        },
-        name: "鲜血魔井"
-      },
-      skills: [
-        {
-          description:
-            "亚托克斯向目标位置纵身一跃并猛击，对落点中央的敌人造成伤害和击飞效果。",
-          id: "AatroxQ",
-          image: {
-            full: "AatroxQ.png",
-            group: "spell",
-            h: 48,
-            sprite: "spell0.png",
-            w: 48,
-            x: 432,
-            y: 48
-          },
-          leveltip: {
-            effect: ["20/50/80/110/140", "13/12.5/12/11.5/11"],
-            label: ["伤害", "冷却时间"]
-          },
-          name: "黑暗之跃",
-          resource: "无消耗",
-          tooltip:
-            '亚托克斯纵身一跃然后猛击向目标位置，对落点中心的敌人造成20/50/80/110/140<span class="colorF88017">(+1.1)</span>物理伤害和持续1秒的击飞效果。<br /><br />亚托克斯会在施放时使鲜血魔井的储量上升20%。'
-        },
-        {
-          description:
-            "开启后，亚托克斯的每第三次连续的攻击将造成额外伤害并使鲜血魔井的储量上升。关闭后，亚托克斯的每第三次连续的攻击将回复自己的生命值。",
-          id: "AatroxW",
-          image: {
-            full: "AatroxW.png",
-            group: "spell",
-            h: 48,
-            sprite: "spell0.png",
-            w: 48,
-            x: 0,
-            y: 96
-          },
-          leveltip: {
-            effect: ["30/45/60/75/90", "50/85/120/155/190"],
-            label: ["治疗效果", "伤害"]
-          },
-          name: "血之渴望/血之报偿",
-          resource: "无消耗",
-          tooltip:
-            '<span class="colorFF9900">关闭时：</span><span color="#e60000">血之渴望：</span>亚托克斯每第三次攻击会回复30/45/60/75/90<span class="colorCC3300">(+{{ f1*100 }}%已损失生命值)</span>生命值。<br /><br /><span class="colorFF9900">开启时：</span><span class="color9900ff">血之报偿：</span>每第三次攻击造成50/85/120/155/190<span class="colorF88017">(+0.75)</span>额外物理伤害，并使鲜血魔井的储量上升20%。'
-        },
-        {
-          description: "亚托克斯释放剑气，对命中的敌人造成伤害和减速效果。",
-          id: "AatroxE",
-          image: {
-            full: "AatroxE.png",
-            group: "spell",
-            h: 48,
-            sprite: "spell0.png",
-            w: 48,
-            x: 48,
-            y: 96
-          },
-          leveltip: {
-            effect: ["80/120/160/200/240", "30/35/40/45/50%", "12/11/10/9/8"],
-            label: ["伤害", "减速", "冷却时间"]
-          },
-          name: "痛苦利刃",
-          resource: "消耗30生命值",
-          tooltip:
-            '亚托克斯释放剑气，对命中的敌人造成80/120/160/200/240 <span class="colorF88017">(+0.7)</span>物理伤害并减少他们30/35/40/45/50%移动速度，持续2秒。<br /><br />亚托克斯会在施放时使鲜血魔井的储量上升20%。'
-        },
-        {
-          description:
-            "亚托克斯抽取敌人的血液，对周围的所有敌方英雄造成伤害。在之后的一段时间里，亚托克斯会提升攻击速度和攻击距离。",
-          id: "AatroxR",
-          image: {
-            full: "AatroxR.png",
-            group: "spell",
-            h: 48,
-            sprite: "spell0.png",
-            w: 48,
-            x: 96,
-            y: 96
-          },
-          leveltip: {
-            effect: ["200/300/400", "40/50/60%", "100/85/70"],
-            label: ["伤害", "攻击速度", "冷却时间"]
-          },
-          name: "浴血屠戮",
-          resource: "无消耗",
-          tooltip:
-            '亚托克斯从敌人身上抽取血液，对附近的敌方英雄造成200/300/400<span class="color99FF99">(+1)</span>魔法伤害，每命中一个英雄会使鲜血魔井的储量上升20%。<br /><br />在施放时，亚托克斯获得40/50/60%攻速加成和225攻击距离加成，持续12秒。'
-        }
-      ],
       blocks: [
         {
-            "map": "1",
-            "mode": "CLASSIC",
-            "recommended": [
+          map: "1",
+          mode: "CLASSIC",
+          recommended: [
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "SummonerSmite",
+              items: [
                 {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "SummonerSmite",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "1055"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "2003"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3340"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "",
-                    "type": "starting",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
+                  count: 1,
+                  hideCount: false,
+                  id: "1055"
                 },
                 {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "1041"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "2031"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3340"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "SummonerSmite",
-                    "type": "startingjungle",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
+                  count: 1,
+                  hideCount: false,
+                  id: "2003"
                 },
                 {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "SummonerSmite",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "1001"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3077"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "1053"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "",
-                    "type": "early",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "1001"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3706"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "1043"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "SummonerSmite",
-                    "type": "earlyjungle",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "SummonerSmite",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3047"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3153"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3812"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "",
-                    "type": "essential",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3047"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "1416"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3153"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "SummonerSmite",
-                    "type": "essentialjungle",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "SummonerSmite",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3078"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3074"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3071"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "",
-                    "type": "offensive",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "SummonerSmite",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3143"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3156"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3065"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "",
-                    "type": "defensive",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3074"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3812"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3071"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "SummonerSmite",
-                    "type": "offensive",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3065"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3156"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": false,
-                            "id": "3143"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "SummonerSmite",
-                    "type": "defensive",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
-                },
-                {
-                    "appendAfterSection": "",
-                    "hiddenWithAnyOf": [
-                        ""
-                    ],
-                    "hideIfSummonerSpell": "",
-                    "items": [
-                        {
-                            "count": 1,
-                            "hideCount": true,
-                            "id": "2003"
-                        },
-                        {
-                            "count": 1,
-                            "hideCount": true,
-                            "id": "2140"
-                        }
-                    ],
-                    "maxSummonerLevel": -1,
-                    "minSummonerLevel": -1,
-                    "recMath": false,
-                    "recSteps": false,
-                    "showIfSummonerSpell": "",
-                    "type": "consumables",
-                    "visibleWithAllOf": [
-                        ""
-                    ]
+                  count: 1,
+                  hideCount: false,
+                  id: "3340"
                 }
-            ]
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "",
+              type: "starting",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "1041"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "2031"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3340"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "SummonerSmite",
+              type: "startingjungle",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "SummonerSmite",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "1001"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3077"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "1053"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "",
+              type: "early",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "1001"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3706"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "1043"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "SummonerSmite",
+              type: "earlyjungle",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "SummonerSmite",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3047"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3153"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3812"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "",
+              type: "essential",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3047"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "1416"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3153"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "SummonerSmite",
+              type: "essentialjungle",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "SummonerSmite",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3078"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3074"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3071"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "",
+              type: "offensive",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "SummonerSmite",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3143"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3156"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3065"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "",
+              type: "defensive",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3074"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3812"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3071"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "SummonerSmite",
+              type: "offensive",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "",
+              items: [
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3065"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3156"
+                },
+                {
+                  count: 1,
+                  hideCount: false,
+                  id: "3143"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "SummonerSmite",
+              type: "defensive",
+              visibleWithAllOf: [""]
+            },
+            {
+              appendAfterSection: "",
+              hiddenWithAnyOf: [""],
+              hideIfSummonerSpell: "",
+              items: [
+                {
+                  count: 1,
+                  hideCount: true,
+                  id: "2003"
+                },
+                {
+                  count: 1,
+                  hideCount: true,
+                  id: "2140"
+                }
+              ],
+              maxSummonerLevel: -1,
+              minSummonerLevel: -1,
+              recMath: false,
+              recSteps: false,
+              showIfSummonerSpell: "",
+              type: "consumables",
+              visibleWithAllOf: [""]
+            }
+          ]
         }
-    ],
+      ],
       cur_skill: null
     };
   },
-  mounted(){
-    this.cur_skill = this.passive.name
+  beforeCreate() {
+    this.$store.dispatch("fetchHeroDetail", this.$route.query.id);
   },
-  methods:{
-      hotKey(index){
-          if(index===0){
-              return 'Q'
-          }else if(index===1){
-              return 'W'
-          }else if(index===2){
-              return 'E'
-          }else if(index===3){
-              return 'R'
-          }
-      },
-      showEquip(type,summoner){
-          if(type==="starting"){
-              return '起始装备'
-          }else if(type==="essential"){
-              return '核心物品'
-          }else if(type==="offensive"){
-              if(!summoner){
-                return '进攻型物品'
-              }else{
-                return ''
-              }
-          }else if(type==="defensive"){
-              if(!summoner){
-                return '防御型物品'
-              }else{
-                return ''
-              }
-          }else{
-              return ''
-          }
+  created() {
+    console.log("this.hero", this.hero);
+  },
+  mounted() {
+    //this.cur_skill = this.hero[0].passive.name || null
+    console.log(this)
+  },
+  computed: {
+    ...mapState(["hero"])
+  },
+  watch: {
+    hero(){
+      this.cur_skill = this.hero[0].passive.name
+    }
+  },
+  methods: {
+    hotKey(index) {
+      if (index === 0) {
+        return "Q";
+      } else if (index === 1) {
+        return "W";
+      } else if (index === 2) {
+        return "E";
+      } else if (index === 3) {
+        return "R";
       }
+    },
+    showEquip(type, summoner) {
+      if (type === "starting") {
+        return "起始装备";
+      } else if (type === "essential") {
+        return "核心物品";
+      } else if (type === "offensive") {
+        if (!summoner) {
+          return "进攻型物品";
+        } else {
+          return "";
+        }
+      } else if (type === "defensive") {
+        if (!summoner) {
+          return "防御型物品";
+        } else {
+          return "";
+        }
+      } else {
+        return "";
+      }
+    },
+    tags(tag){
+        if(tag==='Mage'){
+            return '法师'
+        }else if(tag==="Assassin"){
+            return '刺客'
+        }else if(tag==="Fighter"){
+            return '战士'
+        }else if(tag==="Tank"){
+            return '坦克'
+        }else if(tag==="Marksman"){
+            return '射手'
+        }else if(tag==="Support"){
+            return '辅助'
+        }
+    }
   }
 };
 </script>
