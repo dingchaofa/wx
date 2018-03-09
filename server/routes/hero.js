@@ -20,7 +20,7 @@ export class WechatController {
             .exec()
         }else{
             heroData = await HeroModel
-            .find({},{blocks:0})
+            .find({})
             .limit(5)
             .exec()
         }
